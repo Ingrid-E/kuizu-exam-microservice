@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -14,10 +15,11 @@ import lombok.NonNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "activity")
+@Table(name = "exam")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ExamEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +30,7 @@ public class ExamEntity {
     @Column(name = "_description")
     @NonNull
     private String description;
-    @Column(name = "created_a")
+    @Column(name = "created_at")
     @NonNull
     private LocalDateTime createdAt;
     @Column(name = "start_at")

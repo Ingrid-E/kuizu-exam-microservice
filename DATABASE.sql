@@ -1,7 +1,7 @@
 CREATE TABLE exam (
 	id_exam INTEGER NOT NULL AUTO_INCREMENT,
     _name VARCHAR(100) NOT NULL,
-    _description VARCHAR(150) NOT NULL,
+    _description VARCHAR(150) NULL,
     created_at TIMESTAMP NOT NULL,
     start_at TIMESTAMP NULL,
     end_at TIMESTAMP NULL,
