@@ -1,12 +1,12 @@
 CREATE TABLE exam (
 	id_exam INTEGER NOT NULL AUTO_INCREMENT,
     _name VARCHAR(100) NOT NULL,
-    _description VARCHAR(150) NOT NULL,
+    _description VARCHAR(150) NULL,
     created_at TIMESTAMP NOT NULL,
     start_at TIMESTAMP NULL,
     end_at TIMESTAMP NULL,
     time_limit INTEGER NULL,
-    state INTEGER NOT NULL,
+    state ENUM('inactive', 'active', 'finished') DEFAULT 'inactive',
     id_course VARCHAR(150) NOT NULL,
     PRIMARY KEY(id_exam)
 );
@@ -21,6 +21,7 @@ CREATE TABLE grade (
     CONSTRAINT fk_exam_grade
 		FOREIGN KEY(id_exam)
 			REFERENCES exam(id_exam)
+				ON DELETE CASCADE
 );
 
 CREATE TABLE examXstudent(
@@ -33,6 +34,7 @@ CREATE TABLE examXstudent(
 	CONSTRAINT fk_exam_student
 		FOREIGN KEY(id_exam)
 			REFERENCES exam(id_exam)
+				ON DELETE CASCADE
 );
 
 CREATE TABLE question(
@@ -44,18 +46,20 @@ CREATE TABLE question(
 	CONSTRAINT fk_exam_question
 		FOREIGN KEY(id_exam)
 			REFERENCES exam(id_exam)
+				ON DELETE CASCADE
 );
 
 CREATE TABLE _option(
 	id_option INTEGER NOT NULL AUTO_INCREMENT,
     id_question INTEGER NOT NULL,
 	_description VARCHAR(150) NOT NULL,
-    _type INTEGER NOT NULL,
+    _type ENUM('open', 'multiple-order', 'multiple-unorder') DEFAULT 'multiple-order',
     id_correct BOOLEAN NOT NULL,
 	PRIMARY KEY(id_option),
 	CONSTRAINT fk_question_option
 		FOREIGN KEY(id_question)
 			REFERENCES question(id_question)
+				ON DELETE CASCADE
 );
 
 CREATE TABLE optionXstudent(
@@ -66,4 +70,5 @@ CREATE TABLE optionXstudent(
 	CONSTRAINT fk_option_student
 		FOREIGN KEY(id_option)
 			REFERENCES _option(id_option)
+				ON DELETE CASCADE
 );
