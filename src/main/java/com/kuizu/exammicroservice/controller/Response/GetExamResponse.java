@@ -1,20 +1,20 @@
-package com.kuizu.exammicroservice.controller.Request;
+package com.kuizu.exammicroservice.controller.Response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
-public class ExamRequest {
+@Builder
+public class GetExamResponse {
     private Integer idExam;
     private String name;
     private String description;
-    private String startAt;
-    private String endAt;
+    private LocalDateTime startAt;
+    private LocalDateTime endAt;
     private Integer timeLimit;
     private String state;
     private String idCourse;

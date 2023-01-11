@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ExamResponse {
+public class IdExamResponse {
     private Integer id_exam;
 }

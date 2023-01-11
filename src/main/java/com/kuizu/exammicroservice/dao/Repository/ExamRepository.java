@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @Data
 @RequiredArgsConstructor
@@ -14,15 +16,23 @@ public class ExamRepository {
     private final ExamDao examDao;
 
     public ExamEntity save(ExamEntity examEntity){
-        log.info("Save Repository");
         ExamEntity exam = new ExamEntity();
         try{
-            log.info("Before sended: " + exam.toString());
             exam = examDao.save(examEntity);
-            log.info("After sended: " + exam.toString());
         }catch (Exception ex){
             log.info(ex.getMessage());
         }
         return exam;
+    }
+    public List<ExamEntity> getExams(){
+        return examDao.findAll();
+    }
+
+    public ExamEntity getExams(Integer idExam){
+        return examDao.findById(idExam).orElse(null);
+    }
+
+    public void deleteExam(Integer idExam){
+        examDao.deleteById(idExam);
     }
 }
