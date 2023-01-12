@@ -32,6 +32,10 @@ public class ExamRepository {
         return examDao.findById(idExam).orElse(null);
     }
 
+    public List<ExamEntity> getCourseExams(String idCourse){
+        return examDao.findAllByIdCourse(idCourse).orElse(null);
+    }
+
     public void deleteExam(Integer idExam){
         examDao.deleteById(idExam);
     }

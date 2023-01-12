@@ -24,7 +24,7 @@ public class ExamEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_exam")
-    private Integer idExam;
+    private Long idExam;
     @Column(name = "_name")
     @NonNull
     private String name;

@@ -24,13 +24,13 @@ public class GradeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_grade")
-    private Integer idGrade;
+    private Long idGrade;
     @Column(name = "id_student")
     @NonNull
-    private Integer idStudent;
+    private Long idStudent;
     @Column(name = "id_exam")
     @NonNull
-    private Integer idExam;
+    private Long idExam;
     @Column(name = "_value")
     @NonNull
     private Double value;

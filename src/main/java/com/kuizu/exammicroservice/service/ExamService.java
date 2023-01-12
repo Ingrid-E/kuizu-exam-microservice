@@ -2,7 +2,7 @@ package com.kuizu.exammicroservice.service;
 
 import com.kuizu.exammicroservice.controller.Request.ExamRequest;
 import com.kuizu.exammicroservice.controller.Response.GetExamResponse;
-import com.kuizu.exammicroservice.controller.Response.IdExamResponse;
+import com.kuizu.exammicroservice.controller.Response.IdResponse;
 import com.kuizu.exammicroservice.dao.Repository.ExamRepository;
 import com.kuizu.exammicroservice.entity.ExamEntity;
 import lombok.RequiredArgsConstructor;
@@ -12,13 +12,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ExamService {
     private final ExamRepository examRepository;
     private final static DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    public IdExamResponse createExam(ExamRequest examRequest){
+    public IdResponse createExam(ExamRequest examRequest){
 
         ExamEntity exam = ExamEntity.builder()
                 .name(examRequest.getName())
@@ -32,7 +33,7 @@ public class ExamService {
                 .build();
 
         ExamEntity examEntity = examRepository.save(exam);
-        return new IdExamResponse(examEntity.getIdExam());
+        return new IdResponse(examEntity.getIdExam());
     }
 
     public void updateExam(ExamRequest examRequest){
@@ -71,6 +72,22 @@ public class ExamService {
             getExamResponses.add(getExamResponse);
         }
         return getExamResponses;
+    }
+
+    public List<GetExamResponse> getCourseExams(String courseId){
+        return examRepository.getCourseExams(courseId).stream()
+                .map(exam -> {
+                    return GetExamResponse.builder()
+                            .idExam(exam.getIdExam())
+                            .name(exam.getName())
+                            .description(exam.getDescription())
+                            .startAt(exam.getStartAt())
+                            .endAt(exam.getEndAt())
+                            .timeLimit(exam.getTimeLimit())
+                            .state(exam.getState())
+                            .idCourse(exam.getIdCourse())
+                            .build();
+                }).collect(Collectors.toList());
     }
 
     public GetExamResponse getExam(Integer idExam){

@@ -2,7 +2,7 @@ package com.kuizu.exammicroservice.controller;
 
 import com.kuizu.exammicroservice.controller.Request.ExamRequest;
 import com.kuizu.exammicroservice.controller.Response.GetExamResponse;
-import com.kuizu.exammicroservice.controller.Response.IdExamResponse;
+import com.kuizu.exammicroservice.controller.Response.IdResponse;
 import com.kuizu.exammicroservice.controller.Response.GenericResponse;
 import com.kuizu.exammicroservice.service.ExamService;
 import lombok.RequiredArgsConstructor;
@@ -32,18 +32,23 @@ public class ExamController {
         log.info("GET CALLED");
         return new GenericResponse<>(true, HttpStatus.OK,"Exam List", examService.getExams());
     }
-    @GetMapping("/{id_course}")
-    public GenericResponse<GetExamResponse> getExam(@PathVariable("id_course") Integer idExam){
+    @GetMapping("/{id_exam}")
+    public GenericResponse<GetExamResponse> getExam(@PathVariable("id_exam") Integer idExam){
         log.info(idExam.toString());
         return new GenericResponse<>(true, HttpStatus.OK,"Exam Found", examService.getExam(idExam));
     }
+    @GetMapping("/course/{id_course}")
+    public GenericResponse<List<GetExamResponse>> getExam(@PathVariable("id_course") String idCourse){
+        log.info(idCourse.toString());
+        return new GenericResponse<>(true, HttpStatus.OK,"Exam Found", examService.getCourseExams(idCourse));
+    }
     @PostMapping
-    public GenericResponse<IdExamResponse> createExam(@RequestBody ExamRequest exam){
+    public GenericResponse<IdResponse> createExam(@RequestBody ExamRequest exam){
         log.info(exam.toString());
         return new GenericResponse<>(true, HttpStatus.CREATED,"Exam Created!", examService.createExam(exam));
     }
     @PutMapping
-    public GenericResponse<IdExamResponse> updateExam(@RequestBody ExamRequest exam){
+    public GenericResponse<IdResponse> updateExam(@RequestBody ExamRequest exam){
         log.info(exam.toString());
         examService.updateExam(exam);
         return new GenericResponse<>(true, HttpStatus.OK,"Exam Updated!");

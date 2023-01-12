@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class GetExamResponse {
-    private Integer idExam;
+    private Long idExam;
     private String name;
     private String description;
     private LocalDateTime startAt;
