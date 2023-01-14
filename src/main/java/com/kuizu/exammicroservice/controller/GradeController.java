@@ -30,14 +30,17 @@ public class GradeController {
     private final GradeService gradeService;
     @GetMapping("/course-avg/{id_course}")
     public GenericResponse<GradeAverageResponse> getCourseAverage(@PathVariable("id_course") String idCourse){
+        log.info(idCourse);
         return new GenericResponse<>(true, HttpStatus.OK,"Course Grade list", new GradeAverageResponse(gradeService.getCourseAverage(idCourse)));
     }
     @GetMapping
     public GenericResponse<List<GetGradeResponse>> getAllGrades(){
+        log.info("Get all Grades");
         return new GenericResponse<>(true, HttpStatus.OK,"Grade List", gradeService.getAllGrades());
     }
     @GetMapping("/{id_grade}")
     public GenericResponse<GetGradeResponse> getGrade(@PathVariable("id_grade") Long idGrade){
+        log.info(idGrade.toString());
         return new GenericResponse<>(true, HttpStatus.OK,"Grade List", gradeService.getGrade(idGrade));
     }
 

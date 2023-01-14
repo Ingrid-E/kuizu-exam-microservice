@@ -25,7 +25,8 @@ public class GradeRepository {
     }
 
     public Double getExamGradesAverage(Long idExam){
-        return gradeDao.findAllByIdExam(idExam).orElse(null).stream()
+        return gradeDao.findAllByIdExam(idExam).stream()
+                .flatMap(List::stream)
                 .mapToDouble(GradeEntity::getValue)
                 .average()
                 .orElse(0);

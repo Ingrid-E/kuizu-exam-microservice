@@ -7,13 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExamRequest {
+public class QuestionRequest {
+    private Long idQuestion;
     private Long idExam;
-    private String name;
     private String description;
-    private String startAt;
-    private String endAt;
-    private Integer timeLimit;
-    private String state;
-    private String idCourse;
+    private Double value;
 }

@@ -1,6 +1,8 @@
 package com.kuizu.exammicroservice.dao.Repository;
 import com.kuizu.exammicroservice.dao.ExamDao;
+import com.kuizu.exammicroservice.dao.ExamXStudentDao;
 import com.kuizu.exammicroservice.entity.ExamEntity;
+import com.kuizu.exammicroservice.entity.ExamXStudentEntity;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -14,6 +16,7 @@ import java.util.List;
 @Log
 public class ExamRepository {
     private final ExamDao examDao;
+    private final ExamXStudentDao examXStudentDao;
 
     public ExamEntity save(ExamEntity examEntity){
         ExamEntity exam = new ExamEntity();
@@ -28,7 +31,7 @@ public class ExamRepository {
         return examDao.findAll();
     }
 
-    public ExamEntity getExams(Integer idExam){
+    public ExamEntity getExams(Long idExam){
         return examDao.findById(idExam).orElse(null);
     }
 
@@ -36,7 +39,19 @@ public class ExamRepository {
         return examDao.findAllByIdCourse(idCourse).orElse(null);
     }
 
-    public void deleteExam(Integer idExam){
+    public void deleteExam(Long idExam){
         examDao.deleteById(idExam);
+    }
+
+    public ExamXStudentEntity saveExamXStudent(ExamXStudentEntity examXStudentEntity){
+        return examXStudentDao.save(examXStudentEntity);
+    }
+
+    public void deleteExamXStudent(ExamXStudentEntity examXStudentEntity){
+        examXStudentDao.delete(examXStudentEntity);
+    }
+
+    public List<ExamXStudentEntity> listStudents(Long idExam){
+        return examXStudentDao.findAllByIdExam(idExam).orElse(null);
     }
 }

@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,28 +21,28 @@ public class GradeService {
 
     public Double getCourseAverage(String idCourse){
         List<ExamEntity> examEntities = examRepository.getCourseExams(idCourse);
-        Double gradeAverage = examEntities
+        return examEntities
                 .stream()
-                .mapToDouble(exam -> {
-                    return gradeRepository.getExamGradesAverage(exam.getIdExam());
-                })
+                .filter(exam -> exam.getState().equals("finished"))
+                .mapToDouble(exam ->
+                        gradeRepository.getExamGradesAverage(exam.getIdExam())
+                )
                 .filter(grade -> grade != 0)
                 .average()
                 .orElse(0);
-        return gradeAverage;
     }
 
     public List<GetGradeResponse> getAllGrades(){
         return gradeRepository.getGrades().stream()
-                .map(grade -> {
-                    return GetGradeResponse.builder()
+                .map(grade ->
+                    GetGradeResponse.builder()
                             .idGrade(grade.getIdGrade())
                             .idStudent(grade.getIdStudent())
                             .idExam(grade.getIdExam())
                             .value(grade.getValue())
                             .createdAt(grade.getCreatedAt())
-                            .build();
-                }).collect(Collectors.toList());
+                            .build()
+                ).toList();
     }
 
     public GetGradeResponse getGrade(Long idGrade){

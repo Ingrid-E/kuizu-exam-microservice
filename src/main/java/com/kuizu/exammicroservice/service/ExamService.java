@@ -1,24 +1,39 @@
 package com.kuizu.exammicroservice.service;
 
 import com.kuizu.exammicroservice.controller.Request.ExamRequest;
+import com.kuizu.exammicroservice.controller.Request.ExamStudentOptionsRequest;
+import com.kuizu.exammicroservice.controller.Request.ExamXStudentRequest;
+import com.kuizu.exammicroservice.controller.Request.OptionXStudentRequest;
+import com.kuizu.exammicroservice.controller.Response.GetExamQuestionsResults;
 import com.kuizu.exammicroservice.controller.Response.GetExamResponse;
+import com.kuizu.exammicroservice.controller.Response.GetOptionResponse;
+import com.kuizu.exammicroservice.controller.Response.GetQuestionResponse;
+import com.kuizu.exammicroservice.controller.Response.GetStudent;
 import com.kuizu.exammicroservice.controller.Response.IdResponse;
 import com.kuizu.exammicroservice.dao.Repository.ExamRepository;
 import com.kuizu.exammicroservice.entity.ExamEntity;
+import com.kuizu.exammicroservice.entity.ExamXStudentEntity;
+import com.kuizu.exammicroservice.entity.OptionEntity;
+import com.kuizu.exammicroservice.entity.OptionxStudentEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ExamService {
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private final ExamRepository examRepository;
-    private final static DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+    private final QuestionService questionService;
+
+    private final OptionService optionService;
+
     public IdResponse createExam(ExamRequest examRequest){
 
         ExamEntity exam = ExamEntity.builder()
@@ -32,7 +47,7 @@ public class ExamService {
                 .idCourse(examRequest.getIdCourse())
                 .build();
 
-        ExamEntity examEntity = examRepository.save(exam);
+        ExamEntity examEntity = this.examRepository.save(exam);
         return new IdResponse(examEntity.getIdExam());
     }
 
@@ -48,10 +63,10 @@ public class ExamService {
                 .state(examRequest.getState())
                 .idCourse(examRequest.getIdCourse())
                 .build();
-        examRepository.save(exam);
+        this.examRepository.save(exam);
     }
 
-    public void deleteExam(Integer idExam){
+    public void deleteExam(Long idExam){
         examRepository.deleteExam(idExam);
     }
 
@@ -76,8 +91,8 @@ public class ExamService {
 
     public List<GetExamResponse> getCourseExams(String courseId){
         return examRepository.getCourseExams(courseId).stream()
-                .map(exam -> {
-                    return GetExamResponse.builder()
+                .map(exam ->
+                     GetExamResponse.builder()
                             .idExam(exam.getIdExam())
                             .name(exam.getName())
                             .description(exam.getDescription())
@@ -86,13 +101,13 @@ public class ExamService {
                             .timeLimit(exam.getTimeLimit())
                             .state(exam.getState())
                             .idCourse(exam.getIdCourse())
-                            .build();
-                }).collect(Collectors.toList());
+                            .build()
+                ).toList();
     }
 
-    public GetExamResponse getExam(Integer idExam){
-        ExamEntity exam = examRepository.getExams(idExam);
-        GetExamResponse getExamResponse = GetExamResponse.builder()
+    public GetExamResponse getExamRepository(Long idExam){
+        ExamEntity exam = this.examRepository.getExams(idExam);
+        return GetExamResponse.builder()
                 .idExam(exam.getIdExam())
                 .name(exam.getName())
                 .description(exam.getDescription())
@@ -102,6 +117,50 @@ public class ExamService {
                 .state(exam.getState())
                 .idCourse(exam.getIdCourse())
                 .build();
-        return getExamResponse;
+    }
+
+    public IdResponse addExamXStudent(ExamXStudentRequest examXStudentRequest){
+        ExamXStudentEntity examXStudent = ExamXStudentEntity.builder()
+                .idStudent(examXStudentRequest.getIdStudent())
+                .idExam(examXStudentRequest.getIdExam())
+                .completedAt(LocalDateTime.now())
+                .build();
+        return new IdResponse(examRepository.saveExamXStudent(examXStudent).getIdStudent());
+    }
+
+    public void deleteExamXStudent(ExamXStudentRequest examXStudentRequest){
+        ExamXStudentEntity examXStudent = ExamXStudentEntity.builder()
+                .idStudent(examXStudentRequest.getIdStudent())
+                .idExam(examXStudentRequest.getIdExam())
+                .completedAt(LocalDateTime.now())
+                .build();
+        examRepository.deleteExamXStudent(examXStudent);
+    }
+
+    public List<GetStudent> listStudents(Long idExam){
+        return examRepository.listStudents(idExam).stream()
+                .map(student -> GetStudent.builder()
+                        .idStudent(student.getIdStudent())
+                        .completed_at(student.getCompletedAt())
+                        .build())
+                .toList();
+    }
+
+    public GetExamQuestionsResults studentQuestionResults(Long idStudent, Long idExam){
+        HashMap<Long, Long> studentExamResponse = new HashMap<>();
+        ExamEntity exam = examRepository.getExams(idExam);
+        for (GetQuestionResponse question: questionService.getExamQuestions(idExam)) {
+            GetOptionResponse questionOption = optionService.getQuestionOptions(question.getIdQuestion()).stream()
+                    .filter(option-> optionService.findOptionXStudent(idStudent, option.getIdOption()) != null)
+                    .findFirst()
+                    .orElse(null);
+            Long idOption = null;
+            if(questionOption != null){
+                idOption = questionOption.getIdOption();
+            }
+            studentExamResponse.put(question.getIdQuestion(), idOption);
+        }
+
+        return new GetExamQuestionsResults(exam, studentExamResponse);
     }
 }
