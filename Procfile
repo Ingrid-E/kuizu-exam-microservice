@@ -1,1 +1,1 @@
-web:java -Dserver.port=57450 -jar build/libs/exam-microservice-0.0.1-SNAPSHOT.jar
+web:java  -Dspring.profiles.active=heroku -Dserver.port=57450 -jar build/libs/*.jar
