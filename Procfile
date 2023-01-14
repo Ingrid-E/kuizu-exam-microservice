@@ -1,1 +1,1 @@
-web:java -Dserver.port=57450 $JAVA_OPTS -jar build/libs/exam-microservice-0.0.1-SNAPSHOT.jar
+web:java -Dserver.port=57450 -jar build/libs/exam-microservice-0.0.1-SNAPSHOT.jar
