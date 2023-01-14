@@ -12,29 +12,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import java.time.LocalDateTime;
-
 @Entity
-@Table(name = "grade")
+@Table(name = "optionxstudent")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
-public class GradeEntity {
+public class OptionxStudentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_grade")
-    private Long idGrade;
+    @Column(name = "id_optionxstudent")
+    private Long idOptionxStudent;
     @Column(name = "id_student")
     @NonNull
     private Long idStudent;
-    @Column(name = "id_exam")
-    @NonNull
-    private Long idExam;
-    @Column(name = "_value")
-    @NonNull
-    private Double value;
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = "id_option")
+    private Long idOption;
 }

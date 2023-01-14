@@ -7,18 +7,18 @@ import org.springframework.http.HttpStatus;
 public class GenericResponse<T> {
     private Boolean success;
     private int code;
-    private DataResponse data;
+    private DataResponse<T> data;
 
     public GenericResponse(Boolean success, HttpStatus code, String title, T data){
         this.success = success;
         this.code = code.value();
-        this.data = new DataResponse(title, data);
+        this.data = new DataResponse<>(title, data);
     }
 
     public GenericResponse(Boolean success, HttpStatus code, String title){
         this.success = success;
         this.code = code.value();
-        this.data = new DataResponse(title);
+        this.data = new DataResponse<>(title);
     }
 
     public Boolean getSuccess() {
@@ -29,11 +29,11 @@ public class GenericResponse<T> {
         this.success = success;
     }
 
-    public DataResponse getData() {
+    public DataResponse<T> getData() {
         return data;
     }
 
-    public void setData(DataResponse data) {
+    public void setData(DataResponse<T> data) {
         this.data = data;
     }
 
@@ -45,11 +45,11 @@ public class GenericResponse<T> {
         this.code = code;
     }
 
-    public class DataResponse<T>{
+    public class DataResponse<S>{
         private String title;
-        private T data;
+        private S data;
 
-        public DataResponse(String title, T data){
+        public DataResponse(String title, S data){
             this.title = title;
             this.data = data;
         }
@@ -66,11 +66,11 @@ public class GenericResponse<T> {
             this.title = title;
         }
 
-        public T getData() {
+        public S getData() {
             return data;
         }
 
-        public void setData(T data) {
+        public void setData(S data) {
             this.data = data;
         }
     }

@@ -54,7 +54,7 @@ CREATE TABLE _option(
     id_question INTEGER NOT NULL,
 	_description VARCHAR(150) NOT NULL,
     _type ENUM('open', 'multiple-order', 'multiple-unorder') DEFAULT 'multiple-order',
-    id_correct BOOLEAN NOT NULL,
+    is_correct BOOLEAN NOT NULL,
 	PRIMARY KEY(id_option),
 	CONSTRAINT fk_question_option
 		FOREIGN KEY(id_question)
