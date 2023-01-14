@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @CrossOrigin()
@@ -59,8 +61,14 @@ public class ExamController {
         examService.updateExam(exam);
         return new GenericResponse<>(true, HttpStatus.OK,"Exam Updated!");
     }
-    @DeleteMapping("/{id_course}")
-    public GenericResponse<GetExamResponse> deleteExam(@PathVariable("id_course") Long idExam){
+    @PutMapping("/{id_course}")
+    public GenericResponse<IdResponse> setExamStatus(@PathVariable("id_course") String idCourse){
+        log.info("Change exam status: " + LocalDateTime.now(ZoneId.of("America/Bogota")));
+        examService.changeExamStatus(idCourse);
+        return new GenericResponse<>(true, HttpStatus.OK,"Exams Updated!");
+    }
+    @DeleteMapping("/{id_exam}")
+    public GenericResponse<GetExamResponse> deleteExam(@PathVariable("id_exam") Long idExam){
         log.info(idExam.toString());
         examService.deleteExam(idExam);
         return new GenericResponse<>(true, HttpStatus.OK,"Exam Found");

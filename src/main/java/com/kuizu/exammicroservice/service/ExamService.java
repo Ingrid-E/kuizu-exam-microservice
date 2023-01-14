@@ -3,6 +3,7 @@ package com.kuizu.exammicroservice.service;
 import com.kuizu.exammicroservice.controller.Request.ExamRequest;
 import com.kuizu.exammicroservice.controller.Request.ExamStudentOptionsRequest;
 import com.kuizu.exammicroservice.controller.Request.ExamXStudentRequest;
+import com.kuizu.exammicroservice.controller.Request.GradeRequest;
 import com.kuizu.exammicroservice.controller.Request.OptionXStudentRequest;
 import com.kuizu.exammicroservice.controller.Response.GetExamQuestionsResults;
 import com.kuizu.exammicroservice.controller.Response.GetExamResponse;
@@ -11,14 +12,17 @@ import com.kuizu.exammicroservice.controller.Response.GetQuestionResponse;
 import com.kuizu.exammicroservice.controller.Response.GetStudent;
 import com.kuizu.exammicroservice.controller.Response.IdResponse;
 import com.kuizu.exammicroservice.dao.Repository.ExamRepository;
+import com.kuizu.exammicroservice.dao.Repository.GradeRepository;
 import com.kuizu.exammicroservice.entity.ExamEntity;
 import com.kuizu.exammicroservice.entity.ExamXStudentEntity;
+import com.kuizu.exammicroservice.entity.GradeEntity;
 import com.kuizu.exammicroservice.entity.OptionEntity;
 import com.kuizu.exammicroservice.entity.OptionxStudentEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +38,7 @@ public class ExamService {
 
     private final OptionService optionService;
 
+    private final GradeRepository gradeRepository;
     public IdResponse createExam(ExamRequest examRequest){
 
         ExamEntity exam = ExamEntity.builder()
@@ -52,6 +57,9 @@ public class ExamService {
     }
 
     public void updateExam(ExamRequest examRequest){
+        if(examRequest.getState().equals("finished")){
+            setExamGrades(examRequest.getIdExam());
+        }
         ExamEntity exam = ExamEntity.builder()
                 .idExam(examRequest.getIdExam())
                 .name(examRequest.getName())
@@ -64,6 +72,43 @@ public class ExamService {
                 .idCourse(examRequest.getIdCourse())
                 .build();
         this.examRepository.save(exam);
+    }
+
+    public void changeExamStatus(String courseId){
+        examRepository.getCourseExams(courseId).stream()
+                .forEach(exam -> {
+                    LocalDateTime now = LocalDateTime.now(ZoneId.of("America/Bogota"));
+                    if(now.isAfter(exam.getEndAt())){
+                        exam.setState("finished");
+                    }else if(now.isAfter(exam.getStartAt())){
+                        exam.setState("active");
+                    }else{
+                        exam.setState("inactive");
+                    }
+                    this.examRepository.save(exam);
+                });
+    }
+
+    public void setExamGrades(Long idExam){
+        List<ExamXStudentEntity> students = examRepository.listStudents(idExam);
+        for (ExamXStudentEntity student: students) {
+            HashMap<Long, Long> studentExamResponse = studentQuestionOption(student.getIdStudent(), idExam);
+            Double questionValue = 5.0/studentExamResponse.size();
+            Double correct = studentExamResponse.entrySet()
+                    .stream()
+                    .filter(entrySet -> {
+                        GetOptionResponse option = optionService.getOption(entrySet.getValue());
+                        if(option != null && option.getIsCorrect()){
+                            return true;
+                        }
+                        return false;
+                    })
+                    .mapToDouble(correctOption -> 1.0)
+                    .sum();
+
+            gradeRepository.saveGrade(new GradeEntity(null, student.getIdStudent(), idExam, correct*questionValue, LocalDateTime.now()));
+
+        }
     }
 
     public void deleteExam(Long idExam){
@@ -147,8 +192,12 @@ public class ExamService {
     }
 
     public GetExamQuestionsResults studentQuestionResults(Long idStudent, Long idExam){
-        HashMap<Long, Long> studentExamResponse = new HashMap<>();
         ExamEntity exam = examRepository.getExams(idExam);
+        return new GetExamQuestionsResults(exam, studentQuestionOption(idStudent, idExam));
+    }
+
+    public HashMap<Long, Long> studentQuestionOption(Long idStudent, Long idExam){
+        HashMap<Long, Long> studentExamResponse = new HashMap<>();
         for (GetQuestionResponse question: questionService.getExamQuestions(idExam)) {
             GetOptionResponse questionOption = optionService.getQuestionOptions(question.getIdQuestion()).stream()
                     .filter(option-> optionService.findOptionXStudent(idStudent, option.getIdOption()) != null)
@@ -160,7 +209,6 @@ public class ExamService {
             }
             studentExamResponse.put(question.getIdQuestion(), idOption);
         }
-
-        return new GetExamQuestionsResults(exam, studentExamResponse);
+        return studentExamResponse;
     }
 }

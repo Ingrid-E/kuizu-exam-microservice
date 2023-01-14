@@ -1,27 +1,33 @@
 package com.kuizu.exammicroservice.service;
 
 import com.kuizu.exammicroservice.controller.Request.GradeRequest;
+import com.kuizu.exammicroservice.controller.Response.GetExamResponse;
 import com.kuizu.exammicroservice.controller.Response.GetGradeResponse;
+import com.kuizu.exammicroservice.controller.Response.GetOptionResponse;
+import com.kuizu.exammicroservice.controller.Response.GetQuestionResponse;
+import com.kuizu.exammicroservice.controller.Response.GetStudent;
 import com.kuizu.exammicroservice.controller.Response.IdResponse;
 import com.kuizu.exammicroservice.dao.Repository.ExamRepository;
 import com.kuizu.exammicroservice.dao.Repository.GradeRepository;
 import com.kuizu.exammicroservice.entity.ExamEntity;
+import com.kuizu.exammicroservice.entity.ExamXStudentEntity;
 import com.kuizu.exammicroservice.entity.GradeEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class GradeService {
     private final GradeRepository gradeRepository;
-    private final ExamRepository examRepository;
+    private final ExamService examService;
 
     public Double getCourseAverage(String idCourse){
-        List<ExamEntity> examEntities = examRepository.getCourseExams(idCourse);
-        return examEntities
+        List<GetExamResponse> examResponse = examService.getCourseExams(idCourse);
+        return examResponse
                 .stream()
                 .filter(exam -> exam.getState().equals("finished"))
                 .mapToDouble(exam ->

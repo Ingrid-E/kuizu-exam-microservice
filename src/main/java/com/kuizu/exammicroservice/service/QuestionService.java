@@ -44,6 +44,12 @@ public class QuestionService {
                 .toList();
     }
 
+    public Long numExamQuestions(Long idExam){
+        return questionRepository.getExamQuestions(idExam).stream()
+                .mapToLong(question -> 1L)
+                .sum();
+    }
+
     public GetQuestionResponse getQuestion(Long idQuestion){
         QuestionEntity question = questionRepository.getQuestion(idQuestion);
         return GetQuestionResponse.builder()
