@@ -47,8 +47,9 @@ public class ExamRepository {
         return examXStudentDao.save(examXStudentEntity);
     }
 
-    public void deleteExamXStudent(ExamXStudentEntity examXStudentEntity){
-        examXStudentDao.delete(examXStudentEntity);
+    public void deleteExamXStudent(Long idStudent, Long idExam){
+        ExamXStudentEntity exam = examXStudentDao.findByIdExamAndIdStudent(idExam, idStudent).orElse(null);
+        examXStudentDao.delete(exam);
     }
 
     public List<ExamXStudentEntity> listStudents(Long idExam){

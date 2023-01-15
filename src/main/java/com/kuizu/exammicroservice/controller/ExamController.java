@@ -71,7 +71,7 @@ public class ExamController {
     public GenericResponse<GetExamResponse> deleteExam(@PathVariable("id_exam") Long idExam){
         log.info(idExam.toString());
         examService.deleteExam(idExam);
-        return new GenericResponse<>(true, HttpStatus.OK,"Exam Found");
+        return new GenericResponse<>(true, HttpStatus.OK,"Exam Deleted");
     }
     @PostMapping("/student")
     public GenericResponse<IdResponse> addStudent(@RequestBody ExamXStudentRequest examXStudentRequest) {
