@@ -37,8 +37,8 @@ public class QuestionController {
 
     @GetMapping
     public GenericResponse<List<GetQuestionResponse>> getExamQuestions(@RequestBody QuestionRequest question){
-        log.info(question.getIdQuestion().toString());
-        return new GenericResponse<>(true, HttpStatus.OK,"Exam Questions!", questionService.getExamQuestions(question.getIdQuestion()));
+        log.info(question.getIdExam().toString());
+        return new GenericResponse<>(true, HttpStatus.OK,"Exam Questions!", questionService.getExamQuestions(question.getIdExam()));
     }
 
     @GetMapping("/{id_question}")

@@ -174,12 +174,7 @@ public class ExamService {
     }
 
     public void deleteExamXStudent(ExamXStudentRequest examXStudentRequest){
-        ExamXStudentEntity examXStudent = ExamXStudentEntity.builder()
-                .idStudent(examXStudentRequest.getIdStudent())
-                .idExam(examXStudentRequest.getIdExam())
-                .completedAt(LocalDateTime.now())
-                .build();
-        examRepository.deleteExamXStudent(examXStudent);
+        examRepository.deleteExamXStudent(examXStudentRequest.getIdStudent(), examXStudentRequest.getIdExam());
     }
 
     public List<GetStudent> listStudents(Long idExam){
