@@ -23,5 +23,5 @@ jobs:
         java-version: '17'
         distribution: 'adopt'
     - name: Run build and test with Gradle Wrapper
-      run: ./gradlew build
-      run: grandle test
+    - run: ./gradlew build
+    - run: grandle test
