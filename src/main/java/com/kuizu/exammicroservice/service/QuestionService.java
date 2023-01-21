@@ -52,6 +52,9 @@ public class QuestionService {
 
     public GetQuestionResponse getQuestion(Long idQuestion){
         QuestionEntity question = questionRepository.getQuestion(idQuestion);
+        if(question == null){
+            return  null;
+        }
         return GetQuestionResponse.builder()
                 .idQuestion(question.getIdQuestion())
                 .idExam(question.getIdExam())
