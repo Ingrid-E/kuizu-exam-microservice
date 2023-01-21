@@ -35,7 +35,7 @@ public class QuestionController {
         return new GenericResponse<>(true, HttpStatus.CREATED,"Question Created!", questionService.createQuestion(question));
     }
 
-    @GetMapping
+    @PostMapping
     public GenericResponse<List<GetQuestionResponse>> getExamQuestions(@RequestBody QuestionRequest question){
         log.info(question.getIdExam().toString());
         return new GenericResponse<>(true, HttpStatus.OK,"Exam Questions!", questionService.getExamQuestions(question.getIdExam()));
