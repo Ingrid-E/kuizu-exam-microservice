@@ -40,7 +40,7 @@ public class QuestionController {
         return new GenericResponse<>(true, HttpStatus.OK,"Exam Questions!", questionService.getExamQuestions(idExam));
     }
 
-    @GetMapping("/{id_question}")
+    @GetMapping("/list/{id_question}")
     public GenericResponse<GetQuestionResponse> getQuestion(@PathVariable("id_question") Long idQuestion){
         log.info(idQuestion.toString());
         return new GenericResponse<>(true, HttpStatus.OK,"Question Found", questionService.getQuestion(idQuestion));
