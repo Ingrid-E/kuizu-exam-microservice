@@ -35,12 +35,12 @@ public class QuestionController {
         return new GenericResponse<>(true, HttpStatus.CREATED,"Question Created!", questionService.createQuestion(question));
     }
 
-    @GetMapping("/{id_exam}")
+    @GetMapping("/list/{id_exam}")
     public GenericResponse<List<GetQuestionResponse>> getExamQuestions(@PathVariable("id_exam") Long idExam){
         return new GenericResponse<>(true, HttpStatus.OK,"Exam Questions!", questionService.getExamQuestions(idExam));
     }
 
-    @GetMapping("/list/{id_question}")
+    @GetMapping("/{id_question}")
     public GenericResponse<GetQuestionResponse> getQuestion(@PathVariable("id_question") Long idQuestion){
         log.info(idQuestion.toString());
         return new GenericResponse<>(true, HttpStatus.OK,"Question Found", questionService.getQuestion(idQuestion));
