@@ -26,10 +26,10 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-  my_job:
+  alert:
     if: ${{ always() }}
     needs: [build]
-    name: Google hook 🤖
+    name: Alert 🤖
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
