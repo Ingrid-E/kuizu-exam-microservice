@@ -27,6 +27,7 @@ jobs:
         run: ./gradlew build
 
   my_job:
+    if: ${{ always() }}
     needs: [build]
     name: Google hook 🤖
     runs-on: ubuntu-latest
