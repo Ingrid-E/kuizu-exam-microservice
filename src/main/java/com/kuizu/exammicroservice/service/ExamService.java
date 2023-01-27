@@ -1,10 +1,7 @@
 package com.kuizu.exammicroservice.service;
 
 import com.kuizu.exammicroservice.controller.Request.ExamRequest;
-import com.kuizu.exammicroservice.controller.Request.ExamStudentOptionsRequest;
 import com.kuizu.exammicroservice.controller.Request.ExamXStudentRequest;
-import com.kuizu.exammicroservice.controller.Request.GradeRequest;
-import com.kuizu.exammicroservice.controller.Request.OptionXStudentRequest;
 import com.kuizu.exammicroservice.controller.Response.GetExamQuestionsResults;
 import com.kuizu.exammicroservice.controller.Response.GetExamResponse;
 import com.kuizu.exammicroservice.controller.Response.GetOptionResponse;
@@ -16,8 +13,6 @@ import com.kuizu.exammicroservice.dao.Repository.GradeRepository;
 import com.kuizu.exammicroservice.entity.ExamEntity;
 import com.kuizu.exammicroservice.entity.ExamXStudentEntity;
 import com.kuizu.exammicroservice.entity.GradeEntity;
-import com.kuizu.exammicroservice.entity.OptionEntity;
-import com.kuizu.exammicroservice.entity.OptionxStudentEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +34,8 @@ public class ExamService {
     private final OptionService optionService;
 
     private final GradeRepository gradeRepository;
+
+    private static final String FINISHED_STATE = "finished";
     public IdResponse createExam(ExamRequest examRequest){
 
         ExamEntity exam = ExamEntity.builder()
@@ -57,7 +54,7 @@ public class ExamService {
     }
 
     public void updateExam(ExamRequest examRequest){
-        if(examRequest.getState().equals("finished")){
+        if(examRequest.getState().equals(FINISHED_STATE)){
             setExamGrades(examRequest.getIdExam());
         }
         ExamEntity exam = ExamEntity.builder()
@@ -79,7 +76,8 @@ public class ExamService {
                 .forEach(exam -> {
                     LocalDateTime now = LocalDateTime.now(ZoneId.of("America/Bogota"));
                     if(now.isAfter(exam.getEndAt())){
-                        exam.setState("finished");
+                        exam.setState(FINISHED_STATE);
+                        setExamGrades(exam.getIdExam());
                     }else if(now.isAfter(exam.getStartAt())){
                         exam.setState("active");
                     }else{
@@ -148,6 +146,15 @@ public class ExamService {
                             .idCourse(exam.getIdCourse())
                             .build()
                 ).toList();
+    }
+
+    public Double getCourseStudentAvg(String courseId, Long idStudent){
+        return examRepository.getCourseExams(courseId).stream()
+                .filter(exam-> exam.getState().equals(FINISHED_STATE))
+                .mapToDouble(exam-> gradeRepository.getGradeByIdStudentAndIdExam(idStudent, exam.getIdExam()))
+                .filter(grade -> grade != 0)
+                .average()
+                .orElse(0);
     }
 
     public GetExamResponse getExamRepository(Long idExam){
