@@ -3,10 +3,8 @@ package com.kuizu.exammicroservice.controller;
 import com.kuizu.exammicroservice.controller.Request.ExamRequest;
 import com.kuizu.exammicroservice.controller.Request.ExamStudentOptionsRequest;
 import com.kuizu.exammicroservice.controller.Request.ExamXStudentRequest;
-import com.kuizu.exammicroservice.controller.Request.OptionXStudentRequest;
 import com.kuizu.exammicroservice.controller.Response.GetExamQuestionsResults;
 import com.kuizu.exammicroservice.controller.Response.GetExamResponse;
-import com.kuizu.exammicroservice.controller.Response.GetOptionResponse;
 import com.kuizu.exammicroservice.controller.Response.GetStudent;
 import com.kuizu.exammicroservice.controller.Response.IdResponse;
 import com.kuizu.exammicroservice.controller.Response.GenericResponse;
@@ -49,6 +47,11 @@ public class ExamController {
     public GenericResponse<List<GetExamResponse>> getExam(@PathVariable("id_course") String idCourse){
         log.info(idCourse);
         return new GenericResponse<>(true, HttpStatus.OK,"Course Exams List", examService.getCourseExams(idCourse));
+    }
+    @GetMapping("/course/{id_course}/student/{id_student}")
+    public GenericResponse<Double> getStudentCourseAvg(@PathVariable("id_course") String idCourse, @PathVariable("id_student") Long idStudent){
+        log.info(idCourse + " " + idStudent);
+        return new GenericResponse<>(true, HttpStatus.OK,"Course Exams List", examService.getCourseStudentAvg(idCourse, idStudent));
     }
     @PostMapping
     public GenericResponse<IdResponse> createExam(@RequestBody ExamRequest exam){

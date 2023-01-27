@@ -48,4 +48,12 @@ public class GradeRepository {
         return gradeDao.findById(idGrade).orElse(null);
     }
 
+    public Double getGradeByIdStudentAndIdExam(Long idStudent, Long idExam){
+        GradeEntity grade = gradeDao.findByIdStudentAndIdExam(idStudent, idExam).orElse(null);
+        if(grade == null){
+            return 0.0;
+        }
+        return grade.getValue();
+    }
+
 }
