@@ -3,20 +3,13 @@ package com.kuizu.exammicroservice.service;
 import com.kuizu.exammicroservice.controller.Request.GradeRequest;
 import com.kuizu.exammicroservice.controller.Response.GetExamResponse;
 import com.kuizu.exammicroservice.controller.Response.GetGradeResponse;
-import com.kuizu.exammicroservice.controller.Response.GetOptionResponse;
-import com.kuizu.exammicroservice.controller.Response.GetQuestionResponse;
-import com.kuizu.exammicroservice.controller.Response.GetStudent;
 import com.kuizu.exammicroservice.controller.Response.IdResponse;
-import com.kuizu.exammicroservice.dao.Repository.ExamRepository;
 import com.kuizu.exammicroservice.dao.Repository.GradeRepository;
-import com.kuizu.exammicroservice.entity.ExamEntity;
-import com.kuizu.exammicroservice.entity.ExamXStudentEntity;
 import com.kuizu.exammicroservice.entity.GradeEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -70,6 +63,10 @@ public class GradeService {
                 .createdAt(LocalDateTime.now())
                 .build();
         return new IdResponse(gradeRepository.saveGrade(gradeEntity).getIdGrade());
+    }
+
+    public Double getStudentExamGrade(Long idStudent, Long idExam){
+        return gradeRepository.getGradeByIdStudentAndIdExam(idStudent, idExam);
     }
 
     public void updateGrade(GradeRequest gradeRequest){

@@ -44,6 +44,12 @@ public class GradeController {
         return new GenericResponse<>(true, HttpStatus.OK,"Grade List", gradeService.getGrade(idGrade));
     }
 
+    @GetMapping("/student/{id_student}/exam/{id_exam}")
+    public GenericResponse<Double> getStudentExamGrade(@PathVariable("id_student") Long idStudent, @PathVariable("id_exam") Long idExam){
+        log.info(idStudent.toString() + " " + idExam.toString());
+        return new GenericResponse<>(true, HttpStatus.OK,"Grade List", gradeService.getStudentExamGrade(idStudent, idExam));
+    }
+
     @PostMapping
     public GenericResponse<IdResponse> addGrade(@RequestBody GradeRequest grade){
         log.info(grade.toString());
