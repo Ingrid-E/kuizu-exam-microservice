@@ -61,44 +61,4 @@ class ExamControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Cui asado"));
 
     }
-
-    @Test
-    void getExam() {
-    }
-
-    @Test
-    void testGetExam() {
-    }
-
-    @Test
-    void createExam() {
-    }
-
-    @Test
-    void updateExam() {
-    }
-
-    @Test
-    void setExamStatus() {
-    }
-
-    @Test
-    void deleteExam() {
-    }
-
-    @Test
-    void addStudent() {
-    }
-
-    @Test
-    void deleteStudent() {
-    }
-
-    @Test
-    void listStudents() {
-    }
-
-    @Test
-    void listStudentChosenOptions() {
-    }
 }
