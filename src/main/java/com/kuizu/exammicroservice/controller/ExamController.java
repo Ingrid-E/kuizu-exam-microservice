@@ -73,18 +73,18 @@ public class ExamController {
     @ResponseStatus(HttpStatus.CREATED)
     public GenericResponse<IdResponse> addStudent(@RequestBody ExamXStudentRequest examXStudentRequest) {
         log.info(examXStudentRequest.toString());
-        return new GenericResponse<>(true, HttpStatus.CREATED, "Student completed com.kuizu.exammicroservice.controller.test", examService.addExamXStudent(examXStudentRequest));
+        return new GenericResponse<>(true, HttpStatus.CREATED, "Student completed test", examService.addExamXStudent(examXStudentRequest));
     }
     @DeleteMapping("/student")
     public GenericResponse<IdResponse> deleteStudent(@RequestBody ExamXStudentRequest examXStudentRequest) {
         log.info(examXStudentRequest.toString());
         examService.deleteExamXStudent(examXStudentRequest);
-        return new GenericResponse<>(true, HttpStatus.OK, "Student completed com.kuizu.exammicroservice.controller.test deleted");
+        return new GenericResponse<>(true, HttpStatus.OK, "Student completed test deleted");
     }
     @GetMapping("/student")
     public GenericResponse<List<GetStudent>> listStudents(@RequestBody ExamRequest examRequest) {
         log.info(examRequest.getIdExam().toString());
-        return new GenericResponse<>(true, HttpStatus.OK, "Student completed com.kuizu.exammicroservice.controller.test deleted", examService.listStudents(examRequest.getIdExam()));
+        return new GenericResponse<>(true, HttpStatus.OK, "Student completed test deleted", examService.listStudents(examRequest.getIdExam()));
     }
     @GetMapping("/student/response")
     public GenericResponse<GetExamQuestionsResults> listStudentChosenOptions(@RequestBody ExamStudentOptionsRequest examStudentOptionsRequest) {
