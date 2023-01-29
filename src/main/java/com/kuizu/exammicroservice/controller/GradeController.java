@@ -9,15 +9,7 @@ import com.kuizu.exammicroservice.service.GradeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -51,6 +43,7 @@ public class GradeController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public GenericResponse<IdResponse> addGrade(@RequestBody GradeRequest grade){
         log.info(grade.toString());
         return new GenericResponse<>(true, HttpStatus.CREATED,"Grade Created", gradeService.addGrade(grade));
@@ -64,7 +57,7 @@ public class GradeController {
     }
 
     @DeleteMapping("/{id_grade}")
-    public GenericResponse<IdResponse> updateGrade(@PathVariable("id_grade") Long idGrade){
+    public GenericResponse<IdResponse> deleteGrade(@PathVariable("id_grade") Long idGrade){
         log.info(idGrade.toString());
         gradeService.deleteGrade(idGrade);
         return new GenericResponse<>(true, HttpStatus.OK,"Grade Deleted");

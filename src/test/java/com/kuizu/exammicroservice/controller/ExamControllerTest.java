@@ -91,7 +91,7 @@ class ExamControllerTest {
 
     @Test
     void getExamCourses() throws Exception{
-        List<GetExamResponse> examXcourse = Arrays.asList(
+        List<GetExamResponse> exams_by_course = Arrays.asList(
                 new GetExamResponse(                8L,
                         "San Valentin",
                         "¿Es en febrero o en septiembre?",
@@ -110,7 +110,7 @@ class ExamControllerTest {
                         "1A3D")
         );
 
-        when(examService.getCourseExams("1A3D")).thenReturn(examXcourse);
+        when(examService.getCourseExams("1A3D")).thenReturn(exams_by_course);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/exam/course/1A3D"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -122,7 +122,7 @@ class ExamControllerTest {
 
     @Test
     void getStudentCourseAvg() throws Exception{
-        List<GetExamResponse> exam_course_avg = Arrays.asList(
+        List<GetExamResponse> exams_course_avg = Arrays.asList(
                 new GetExamResponse(                8L,
                         "Test de agudos",
                         "Los 3 mejores están dentro del equipo agudo!",
@@ -141,7 +141,7 @@ class ExamControllerTest {
                         "64YAG3UM")
 
         );
-        when(examService.getCourseExams("64YAG3UM")).thenReturn(exam_course_avg);
+        when(examService.getCourseExams("64YAG3UM")).thenReturn(exams_course_avg);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/exam/course/64YAG3UM/student/4"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -169,6 +169,7 @@ class ExamControllerTest {
 
         verify(examService, times(1)).createExam(examRequest);
     }
+
     @Test
     void updateExam() throws Exception{
         ExamRequest examRequest = new ExamRequest(3L,"Concurso de comida",
@@ -192,7 +193,7 @@ class ExamControllerTest {
 
     @Test
     void setExamStatus() throws Exception{
-        List<GetExamResponse> exam_by_course = Arrays.asList(
+        List<GetExamResponse> exams_by_course = Arrays.asList(
                 new GetExamResponse(8L,
                         "San Valentin",
                         "¿Es en febrero o en septiembre?",
@@ -212,7 +213,7 @@ class ExamControllerTest {
 
         );
 
-        when(examService.getCourseExams("14kD")).thenReturn(exam_by_course);
+        when(examService.getCourseExams("14kD")).thenReturn(exams_by_course);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/exam/14KD"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -228,34 +229,35 @@ class ExamControllerTest {
 
         verify(examService, times(1)).deleteExam(5L);
     }
+
     @Test
     void addStudentExam() throws Exception{
-        ExamXStudentRequest examXStudentRequest = new ExamXStudentRequest(11L,6L,2L);
+        ExamXStudentRequest exam_student_request = new ExamXStudentRequest(11L,6L,2L);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(examXStudentRequest);
+        String json = objectMapper.writeValueAsString(exam_student_request);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/exam/student")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
 
-        verify(examService, times(1)).addExamXStudent(examXStudentRequest);
+        verify(examService, times(1)).addExamXStudent(exam_student_request);
     }
 
     @Test
     void deleteStudentExam() throws Exception{
-        ExamXStudentRequest examXStudentRequest = new ExamXStudentRequest(123L,182L,32L);
+        ExamXStudentRequest exam_student_request = new ExamXStudentRequest(123L,182L,32L);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(examXStudentRequest);
+        String json = objectMapper.writeValueAsString(exam_student_request);
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/exam/student")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
-        verify(examService, times(1)).deleteExamXStudent(examXStudentRequest);
+        verify(examService, times(1)).deleteExamXStudent(exam_student_request);
     }
 
     @Test
@@ -281,10 +283,10 @@ class ExamControllerTest {
 
     @Test
     void listStudentChosenOptions() throws Exception{
-        ExamStudentOptionsRequest examStudentOptionsRequest = new ExamStudentOptionsRequest(4L,11L);
+        ExamStudentOptionsRequest exam_student_options_request = new ExamStudentOptionsRequest(4L,11L);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(examStudentOptionsRequest);
+        String json = objectMapper.writeValueAsString(exam_student_options_request);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/exam/student/response")
                         .contentType(MediaType.APPLICATION_JSON)
