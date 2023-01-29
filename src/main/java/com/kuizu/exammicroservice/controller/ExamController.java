@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -88,9 +89,9 @@ public class ExamController {
         return new GenericResponse<>(true, HttpStatus.OK, "Student completed test deleted");
     }
     @GetMapping("/student")
-    public GenericResponse<List<GetStudent>> listStudents(@RequestBody ExamRequest examRequest) {
-        log.info(examRequest.getIdExam().toString());
-        return new GenericResponse<>(true, HttpStatus.OK, "Student completed test deleted", examService.listStudents(examRequest.getIdExam()));
+    public GenericResponse<List<GetStudent>> listStudents(@RequestParam(name = "idExam") Long idExam) {
+        log.info(idExam.toString());
+        return new GenericResponse<>(true, HttpStatus.OK, "Student completed test deleted", examService.listStudents(idExam));
     }
     @GetMapping("/student/response")
     public GenericResponse<GetExamQuestionsResults> listStudentChosenOptions(@RequestBody ExamStudentOptionsRequest examStudentOptionsRequest) {
