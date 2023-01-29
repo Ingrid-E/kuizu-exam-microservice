@@ -12,20 +12,7 @@ import com.kuizu.exammicroservice.service.OptionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.*;
-=======
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
->>>>>>> aff9ce2e3774686c253fc1e0aea6df6445b4547f
 
 import java.util.List;
 
@@ -45,9 +32,9 @@ public class OptionController {
     }
 
     @GetMapping
-    public GenericResponse<List<GetOptionResponse>> getQuestionOptions(@RequestParam(name="idQuestion") Long idQuestion) {
-        log.info(idQuestion.toString());
-        return new GenericResponse<>(true, HttpStatus.OK, "Question options", optionService.getQuestionOptions(idQuestion));
+    public GenericResponse<List<GetOptionResponse>> getQuestionOptions(@RequestBody OptionRequest optionRequest) {
+        log.info(optionRequest.getIdQuestion().toString());
+        return new GenericResponse<>(true, HttpStatus.OK, "Question options", optionService.getQuestionOptions(optionRequest.getIdQuestion()));
     }
 
     @GetMapping("/{id_option}")
