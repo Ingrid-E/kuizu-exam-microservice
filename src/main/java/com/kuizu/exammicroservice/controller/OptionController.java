@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -39,9 +40,9 @@ public class OptionController {
     }
 
     @GetMapping
-    public GenericResponse<List<GetOptionResponse>> getQuestionOptions(@RequestBody OptionRequest optionRequest) {
-        log.info(optionRequest.getIdQuestion().toString());
-        return new GenericResponse<>(true, HttpStatus.OK, "Question options", optionService.getQuestionOptions(optionRequest.getIdQuestion()));
+    public GenericResponse<List<GetOptionResponse>> getQuestionOptions(@RequestParam(name="idQuestion") Long idQuestion) {
+        log.info(idQuestion.toString());
+        return new GenericResponse<>(true, HttpStatus.OK, "Question options", optionService.getQuestionOptions(idQuestion));
     }
 
     @GetMapping("/{id_option}")
