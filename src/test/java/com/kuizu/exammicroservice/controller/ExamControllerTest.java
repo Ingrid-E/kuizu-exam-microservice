@@ -27,7 +27,6 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(ExamController.class)
-@AutoConfigureMockMvc
 class ExamControllerTest {
 
     @Autowired

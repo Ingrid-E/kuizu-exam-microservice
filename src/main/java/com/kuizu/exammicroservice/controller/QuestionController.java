@@ -8,15 +8,7 @@ import com.kuizu.exammicroservice.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,6 +22,7 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public GenericResponse<IdResponse> createQuestion(@RequestBody QuestionRequest  question){
         log.info(question.toString());
         return new GenericResponse<>(true, HttpStatus.CREATED,"Question Created!", questionService.createQuestion(question));
