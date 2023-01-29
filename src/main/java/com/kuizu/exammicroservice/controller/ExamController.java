@@ -12,15 +12,7 @@ import com.kuizu.exammicroservice.service.ExamService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -54,6 +46,7 @@ public class ExamController {
         return new GenericResponse<>(true, HttpStatus.OK,"Course Exams List", examService.getCourseStudentAvg(idCourse, idStudent));
     }
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public GenericResponse<IdResponse> createExam(@RequestBody ExamRequest exam){
         log.info(exam.toString());
         return new GenericResponse<>(true, HttpStatus.CREATED,"Exam Created!", examService.createExam(exam));
@@ -77,6 +70,7 @@ public class ExamController {
         return new GenericResponse<>(true, HttpStatus.OK,"Exam Deleted");
     }
     @PostMapping("/student")
+    @ResponseStatus(HttpStatus.CREATED)
     public GenericResponse<IdResponse> addStudent(@RequestBody ExamXStudentRequest examXStudentRequest) {
         log.info(examXStudentRequest.toString());
         return new GenericResponse<>(true, HttpStatus.CREATED, "Student completed com.kuizu.exammicroservice.controller.test", examService.addExamXStudent(examXStudentRequest));
