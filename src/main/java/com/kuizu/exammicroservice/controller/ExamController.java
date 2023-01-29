@@ -12,20 +12,7 @@ import com.kuizu.exammicroservice.service.ExamService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.*;
-=======
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
->>>>>>> aff9ce2e3774686c253fc1e0aea6df6445b4547f
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -95,15 +82,9 @@ public class ExamController {
         return new GenericResponse<>(true, HttpStatus.OK, "Student completed com.kuizu.exammicroservice.controller.test deleted");
     }
     @GetMapping("/student")
-<<<<<<< HEAD
     public GenericResponse<List<GetStudent>> listStudents(@RequestBody ExamRequest examRequest) {
         log.info(examRequest.getIdExam().toString());
         return new GenericResponse<>(true, HttpStatus.OK, "Student completed com.kuizu.exammicroservice.controller.test deleted", examService.listStudents(examRequest.getIdExam()));
-=======
-    public GenericResponse<List<GetStudent>> listStudents(@RequestParam(name = "idExam") Long idExam) {
-        log.info(idExam.toString());
-        return new GenericResponse<>(true, HttpStatus.OK, "Student completed test deleted", examService.listStudents(idExam));
->>>>>>> aff9ce2e3774686c253fc1e0aea6df6445b4547f
     }
     @GetMapping("/student/response")
     public GenericResponse<GetExamQuestionsResults> listStudentChosenOptions(@RequestBody ExamStudentOptionsRequest examStudentOptionsRequest) {
