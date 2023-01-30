@@ -32,9 +32,9 @@ public class OptionController {
     }
 
     @GetMapping
-    public GenericResponse<List<GetOptionResponse>> getQuestionOptions(@RequestBody OptionRequest optionRequest) {
-        log.info(optionRequest.getIdQuestion().toString());
-        return new GenericResponse<>(true, HttpStatus.OK, "Question options", optionService.getQuestionOptions(optionRequest.getIdQuestion()));
+    public GenericResponse<List<GetOptionResponse>> getQuestionOptions(@RequestParam(name="idQuestion") Long idQuestion) {
+        log.info(idQuestion.toString());
+        return new GenericResponse<>(true, HttpStatus.OK, "Question options", optionService.getQuestionOptions(idQuestion));
     }
 
     @GetMapping("/{id_option}")
