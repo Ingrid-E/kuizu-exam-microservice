@@ -5,6 +5,7 @@ import com.kuizu.exammicroservice.controller.Request.OptionRequest;
 import com.kuizu.exammicroservice.controller.Request.OptionXStudentRequest;
 import com.kuizu.exammicroservice.controller.Response.GetExamResponse;
 import com.kuizu.exammicroservice.controller.Response.GetOptionResponse;
+import com.kuizu.exammicroservice.controller.Response.GetStudent;
 import com.kuizu.exammicroservice.service.GradeService;
 import com.kuizu.exammicroservice.service.OptionService;
 import org.junit.jupiter.api.Test;
@@ -54,19 +55,18 @@ class OptionControllerTest {
     @Test
     void getQuestionOptions() throws Exception{
 
-        OptionRequest optionRequest = new OptionRequest(3L,4L,
-                "Candy", "multiple-order",false);
+        List<GetOptionResponse> getOptionResponses = Arrays.asList(
+                new GetOptionResponse(2L,12L,"Mint","multiple-order",true),
+                new GetOptionResponse(3L,23L,"Ice cream","multiple-order",true)
+        );
 
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(optionRequest);
+        when(optionService.getQuestionOptions(23L)).thenReturn(getOptionResponses);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/exam/question/option")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                .param("idQuestion", String.valueOf(23L)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
-        verify(optionService, times(1)).getQuestionOptions(4L);
+        verify(optionService, times(1)).getQuestionOptions(23L);
     }
 
     @Test

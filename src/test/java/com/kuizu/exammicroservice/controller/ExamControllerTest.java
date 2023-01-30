@@ -4,6 +4,7 @@ import com.kuizu.exammicroservice.controller.Request.ExamRequest;
 import com.kuizu.exammicroservice.controller.Request.ExamStudentOptionsRequest;
 import com.kuizu.exammicroservice.controller.Request.ExamXStudentRequest;
 import com.kuizu.exammicroservice.controller.Response.GetExamResponse;
+import com.kuizu.exammicroservice.controller.Response.GetStudent;
 import com.kuizu.exammicroservice.service.ExamService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -261,20 +262,18 @@ class ExamControllerTest {
 
     @Test
     void listStudents() throws Exception{
-        ExamRequest examRequest = new ExamRequest(3L,"Gayageum",
-                "La musica clasica le gana al rock!",
-                "2011-10-23 18:00",
-                "2011-10-23 21:00",
-                45,
-                "active",
-                "Rockgeum");
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(examRequest);
+        List<GetStudent> exams_by_course = Arrays.asList(
+                new GetStudent(8L,
+                        LocalDateTime.of(2023,2,9,18,0,0)),
+                new GetStudent(10L,
+                        LocalDateTime.of(2023,11,8,21,0,0))
+        );
+
+        when(examService.listStudents(3L)).thenReturn(exams_by_course);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/exam/student")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .param("idExam", String.valueOf(3L)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         verify(examService, times(1)).listStudents(3L);
