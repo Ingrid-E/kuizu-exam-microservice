@@ -12,16 +12,7 @@ import com.kuizu.exammicroservice.service.OptionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,6 +25,7 @@ public class OptionController {
     private final OptionService optionService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public GenericResponse<IdResponse> createOption(@RequestBody OptionRequest optionRequest) {
         log.info(optionRequest.toString());
         return new GenericResponse<>(true, HttpStatus.CREATED, "Option Created!", optionService.createOption(optionRequest));
@@ -66,6 +58,7 @@ public class OptionController {
     }
 
     @PostMapping("/chosen")
+    @ResponseStatus(HttpStatus.CREATED)
     public GenericResponse<IdResponse> optionChosen(@RequestBody OptionXStudentRequest optionXStudentRequest) {
         log.info(optionXStudentRequest.toString());
         return new GenericResponse<>(true, HttpStatus.CREATED, "Student set option", optionService.addOptionXStudent(optionXStudentRequest));
